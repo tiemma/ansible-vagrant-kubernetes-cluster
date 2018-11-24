@@ -1,16 +1,28 @@
 - hosts: all
   become: yes
   tasks:
+   - name: Append subnets of all nodes to the no_proxy env varible
+     shell: echo no_proxy=$no_proxy,10.244.0.0/16  >> /etc/environment
+
    - name: install Docker
      apt:
        name: docker.io
        state: present
        update_cache: true
-       
+    
+   - name: create kubernetes service directory
+     file:
+       path: /etc/systemd/system/docker.service.d
+       state: directory
+       mode: 0755
+
+   - name: Create the proxy configuration for Docker
+     shell: echo "[Service]" >> /etc/systemd/system/docker.service.d/http_proxy.conf; for i in HTTP{,S}_PROXY; do echo -e Environment=\"$i='trendgate.interswitchng.com:8080'\" >> /etc/systemd/system/docker.service.d/http-proxy.conf; done
+
    - name: Starts and enables service docker, if not started
      service:
        name: docker
-       state: started
+       state: restarted
        enabled: yes
 
    - name: install APT Transport HTTPS
