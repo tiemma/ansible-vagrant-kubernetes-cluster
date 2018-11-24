@@ -2,7 +2,7 @@
   become: yes
   tasks:
    - name: Append subnets of all nodes to the no_proxy env varible
-     shell: echo no_proxy=$no_proxy,10.244.0.0/16  >> /etc/environment
+     shell: echo no_proxy=$no_proxy,10.0.0.0/8  >> /etc/environment
 
    - name: install Docker
      apt:
@@ -17,7 +17,7 @@
        mode: 0755
 
    - name: Create the proxy configuration for Docker
-     shell: echo "[Service]" >> /etc/systemd/system/docker.service.d/http_proxy.conf; for i in HTTP{,S}_PROXY; do echo -e Environment=\"$i='trendgate.interswitchng.com:8080'\" >> /etc/systemd/system/docker.service.d/http-proxy.conf; done
+     shell: echo "[Service]" >> /etc/systemd/system/docker.service.d/http-proxy.conf;  bash -c 'for i in {http_proxy,https_proxy}; do echo Environment=\"$(env | grep $i)\" >> /etc/systemd/system/docker.service.d/http-proxy.conf; done'; systemctl daemon-reload
 
    - name: Starts and enables service docker, if not started
      service:
