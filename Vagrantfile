@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
 
     print "Proxy is " + ENV['PROXY']
 
-    
+
     config.proxy.http     = ENV['PROXY']
     config.proxy.https    = ENV['PROXY']
     config.proxy.no_proxy = "localhost,127.0.0.1"
@@ -22,7 +22,8 @@ Vagrant.configure("2") do |config|
             #machine.vm.network "private_network", ip: "192.168.77.#{20+machine_id}", auto_config: false
 
             # Only execute once the Ansible provisioner,
-            # when all the machines are up and ready.
+            # when all the machines are up and .
+            ready.
             if machine_id == N
                 machine.vm.provision "ansible1" do |ansible1|
                     # Disable default limit to connect to all the machines
