@@ -6,12 +6,12 @@
        name: docker.io
        state: present
        update_cache: true
-
-    - name: Starts and enables service docker, if not started
-      service:
-        name: docker
-        state: started
-        enabled: yes
+       
+   - name: Starts and enables service docker, if not started
+     service:
+       name: docker
+       state: started
+       enabled: yes
 
    - name: install APT Transport HTTPS
      apt:
