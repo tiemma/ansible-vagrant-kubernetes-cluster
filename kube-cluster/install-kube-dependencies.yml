@@ -7,6 +7,12 @@
        state: present
        update_cache: true
 
+    - name: Starts and enables service docker, if not started
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
    - name: install APT Transport HTTPS
      apt:
        name: apt-transport-https
@@ -34,7 +40,7 @@
        name: kubeadm
        state: present
 
-- hosts: master
+- hosts: machine1
   become: yes
   tasks:
    - name: install kubectl
