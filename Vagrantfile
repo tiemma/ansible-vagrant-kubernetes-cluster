@@ -7,9 +7,9 @@ Vagrant.configure("2") do |config|
 
     print "Proxy is " + ENV['PROXY']
 
-
     config.proxy.http     = ENV['PROXY']
     config.proxy.https    = ENV['PROXY']
+
     config.proxy.no_proxy = "localhost,127.0.0.1"
     config.vm.provision "shell" do |s|
         s.path = "install-deps.sh"
@@ -25,17 +25,17 @@ Vagrant.configure("2") do |config|
             # when all the machines are up and .
             ready.
             if machine_id == N
-                machine.vm.provision "ansible1" do |ansible1|
+                machine.vm.provision "create_user" do |create_user|
                     # Disable default limit to connect to all the machines
-                    ansible1.limit = "all"
-                    ansible1.verbose = "v"
-                    ansible1.playbook = "kube-cluster/create-non-root-user.yml"
+                    create_user.limit = "all"
+                    create_user.verbose = "v"
+                    create_user.playbook = "kube-cluster/create-non-root-user.yml"
                 end
-                machine.vm.provision "ansible2" do |ansible2|
+                machine.vm.provision "install_deps" do |install_deps|
                     # Disable default limit to connect to all the machines
-                    ansible2.limit = "all"
-                    ansible2.verbose = "v"
-                    ansible2.playbook = "kube-cluster/install-kube-dependencies.yml"
+                    install_deps.limit = "all"
+                    install_deps.verbose = "v"
+                    install_deps.playbook = "kube-cluster/install-kube-dependencies.yml"
                 end
             end
         end
