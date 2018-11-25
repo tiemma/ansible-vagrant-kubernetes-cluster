@@ -1,9 +1,6 @@
 - hosts: all
   become: yes
   tasks:
-   - name: Append subnets of all nodes to the no_proxy env varible
-     shell: echo no_proxy=$no_proxy,10.0.0.0/8  >> /etc/environment
-
    - name: install Docker
      apt:
        name: docker.io
