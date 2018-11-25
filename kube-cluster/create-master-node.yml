@@ -31,7 +31,7 @@
     - name: install Pod network
       become: yes
       become_user: ubuntu
-      shell: source /etc/environment || true; bash -c "kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" >> pod_network_setup.txt"
+      shell: source /etc/environment || true; bash -c "kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n') >> pod_network_setup.txt"
       args:
         chdir: $HOME
         creates: pod_network_setup.txt
