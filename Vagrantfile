@@ -3,14 +3,15 @@ N = 3
 Vagrant.configure("2") do |config|
 
     config.vm.box = "ubuntu/bionic64"
-    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec sudo bash su ubuntu'"
 
-    print "Proxy is " + ENV['http_proxy']
+    unless ENV['http_proxy'].nil? || ENV['http_proxy'] == 0
+        print "Proxy is " + ENV['http_proxy']
+        config.proxy.http     = ENV['http_proxy']
+        config.proxy.https    = ENV['http_proxy']
+        config.proxy.no_proxy = "localhost,127.0.0.1"
+    end
 
-    config.proxy.http     = ENV['http_proxy']
-    config.proxy.https    = ENV['http_proxy']
-
-    config.proxy.no_proxy = "localhost,127.0.0.1"
     config.vm.provision "shell" do |s|
         s.path = "install-deps.sh"
         s.privileged = true
